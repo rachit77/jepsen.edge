@@ -158,6 +158,8 @@
           :--ibft-validator val3
           :--ibft-validator val4
           :--ibft-validator val5
+          :--premine "0xCB7038f9Bd7762a46bBb2A5208B6644e1945cb52:1000000000000"
+          :--premine "0xFE4B24A8daC952671564632ff10c51ECe80e7Aa5:1000000000000"
           :--bootnode bnode1
           :--bootnode bnode2
           )))
