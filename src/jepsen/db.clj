@@ -28,10 +28,12 @@
 
 (def pat "/root/edge/edge")
 (def base-dir "/root/edge")
-
 (def data-dir "data-dir")
+
+;;Process ID while starting the edge nodes
 (def edge-init-logfile (str pat "/edge-init.log"))
-(def edge-init-pidfile (str pat "/edge-init.pid"))         
+(def edge-init-pidfile (str pat "/edge-init.pid"))   
+
 (def Edge-genesis-log (str pat "/Edge-genesis.log"))
 (def Edge-genesis-pid (str pat "/Edge-genesis.pid"))
 
@@ -43,6 +45,9 @@
         path (get opts opt-name)]
     (cu/install-archive! path (str base-dir "/" app))))
 
+(defn stop-edge! [test node]
+  (c/su (cu/stop-daemon! edge-init-pidfile))
+  :stopped)
 
 (defn read-logfile!
   "Reads the contents of the given logfile and prints it to the console."
@@ -181,4 +186,11 @@
 ;;sleep for some time before teardown
 
     (teardown! [_ test node]
-        (info node "tearing down etcd"))))
+        (info node "tearing down etcd")
+        (stop-edge! test node)
+        (c/su 
+          (c/exec :rm :-rf base-dir)))
+
+;;code for log collection
+
+))
