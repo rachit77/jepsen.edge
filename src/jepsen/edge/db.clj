@@ -139,8 +139,8 @@
 
 
 ;;create boot node string of first 2 nodes
-(def bnode1 (str "/ip4/172.23.0.2/tcp/1478/p2p/" (get-in @empty-atom ["n1" "node_id"])))
-(def bnode2 (str "/ip4/172.23.0.3/tcp/1478/p2p/" (get-in @empty-atom ["n2" "node_id"])))
+(def bnode1 (str "/ip4/172.26.0.11/tcp/1478/p2p/" (get-in @empty-atom ["n1" "node_id"])))
+(def bnode2 (str "/ip4/172.26.0.12/tcp/1478/p2p/" (get-in @empty-atom ["n2" "node_id"])))
 
 
 ;;create genesis file of all the nodes(5 in this case) with specific peers and boot nodes
@@ -188,7 +188,7 @@
 ;;sleep for some time before teardown
 
     (teardown! [_ test node]
-        (info node "tearing down etcd")
+        (info node "tearing down polygon-edge")
         (stop-edge! test node)
         (c/su 
           (c/exec :rm :-rf base-dir)))
