@@ -9,7 +9,7 @@
 ;; (def signer {:private-key "6acc43ba21cfff332106a9318e9ed08c11e7222273419c2c728dbe1d1a9aa032",
 ;;              :address "0xCB7038f9Bd7762a46bBb2A5208B6644e1945cb52"})
 
-(def web3-path "/jepsen/jepsen/web3")
+(def web3-path "/jepsen/jepsen.edge/web3")
 (def port 10002)
 (def sender-private-key "6acc43ba21cfff332106a9318e9ed08c11e7222273419c2c728dbe1d1a9aa032")
 (def sender-address "0xCB7038f9Bd7762a46bBb2A5208B6644e1945cb52")
@@ -38,9 +38,10 @@
 (defn default-get-balance
   "Parameterless get balance"
   [node]
-  (->
-   (let [result (:out (shell/sh
-                       "npm" "run" "start" "--" "balance"
-                       (node-url node) recipient-address
-                       :dir web3-path))]
-     (info (str "<default-get-balance> Result: " result)))))
+  (shell/sh "npm" "run" "start" "--" "balance"
+            (node-url node) recipient-address
+            :dir web3-path)
+  (let [balance (slurp "/balance.txt")]
+    (println "balance from default-get-balance:" balance)
+    (info (str "<default-get-balance> Result: " balance))
+    balance))

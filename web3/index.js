@@ -1,4 +1,5 @@
 const Web3 = require("web3")
+const fs = require('fs')
 
 // npm run start -- sendtx https://rpc.ankr.com/eth_goerli 0x6acc43ba21cfff332106a9318e9ed08c11e7222273419c2c728dbe1d1a9aa032 0xcaeed488ad7e01286aa9a61aba0a81c26fb3caba --value 10 --gas 21001
 // npm run start -- balance https://rpc.ankr.com/eth_goerli 0xcaeed488ad7e01286aa9a61aba0a81c26fb3caba
@@ -78,6 +79,7 @@ async function balance(args) {
         const address = args[1]
         const balance = await web3.eth.getBalance(address)
         console.log('Balance:', balance)
+        fs.writeFileSync('/balance.txt', balance)
     } catch (err) {
         console.log('error: ', err)
         process.exit(1)

@@ -81,6 +81,14 @@
                                         (gen/stagger 1)
                                         (gen/limit 1)))))})))
 
+(defn mychecker [node]
+  (reify checker/Checker
+    (check [this test history opts]
+      ;; Your validation logic goes here 
+      (let [balance (ec/default-get-balance node)
+            is-valid (> (Integer/parseInt balance) 0)]
+        {:valid? is-valid}))))
+
 (defn edge-test
   "Given an options map from the command line runner (e.g. :nodes, :ssh,
   :concurrency ...), constructs a test map."
@@ -92,9 +100,11 @@
                      :pure-generators true})
         dbt (td/db test)
         workload (workload test)
+        node (first (:nodes opts))
         test-with-db (merge test {:db dbt
                                   :client     (:client workload)
                                   :concurrency     (:concurrency workload)
+                                  :checker (mychecker node)
                                   :generator  (gen/phases
                                                (->> (:generator workload)
                                                     (gen/time-limit (:time-limit opts)))
